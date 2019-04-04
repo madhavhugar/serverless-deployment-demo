@@ -1,0 +1,35 @@
+service: demo-deployment
+
+plugins:
+  - serverless-plugin-canary-deployments
+
+frameworkVersion: "=1.36.0"
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: dev
+  region: eu-central-1
+
+functions:
+  hello:
+    handler: index.failingHandler
+    description: Curses the world
+    events:
+      - http:
+          path: greet
+          method: get
+    alarms:
+    - name: err
+      namespace: 'AWS/Lambda'
+      metric: Errors
+      threshold: 1
+      statistic: Minimum
+      period: 60
+      evaluationPeriods: 1
+      comparisonOperator: GreaterThanOrEqualToThreshold
+    deploymentSettings:
+      type: Linear10PercentEvery1Minute
+      alias: Live
+      alarm:
+        - DemoErrAlarm

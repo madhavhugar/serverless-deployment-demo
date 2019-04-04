@@ -1,0 +1,10 @@
+{
+  "name": "demo-deployment",
+  "description": "",
+  "version": "0.1.0",
+  "dependencies": {},
+  "devDependencies": {
+    "serverless": "^1.40.0",
+    "serverless-plugin-canary-deployments": "^0.4.7"
+  }
+}
